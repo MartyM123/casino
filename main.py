@@ -16,12 +16,20 @@ class player:
         amount=10
         return self.decision_function(), amount
     
-    def on_win(self):
+    def on_win(self, *args, **kwargs):
         print('Oh yeah!')
+        
+    def on_lose(self, *args, **kwargs):
+        print('Oh no!')
 
     def __add__(self, other):
-        self.money+other
-        
+        self.money=self.money+other
+    
+    def __sub__(self, other):
+        self.money=self.money-other
+
+    def __str__(self):
+        return str(f'model id: {self.id}, money: {self.money}')
 players = []
 
 #create history
