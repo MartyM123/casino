@@ -7,7 +7,7 @@ def generate():
 history = []
 class player:
     def __init__(self):
-        self.id = str(time.time())
+        self.id = str(random.randint(1, 10**6))
         self.decision_function = lambda: random.choice(['red', 'black'])
         self.money=50
         self.alive=True
@@ -17,10 +17,10 @@ class player:
         return self.decision_function(), amount
     
     def on_win(self, *args, **kwargs):
-        print('Oh yeah!')
+        pass
         
     def on_lose(self, *args, **kwargs):
-        print('Oh no!')
+        pass
 
     def __add__(self, other):
         self.money=self.money+other
