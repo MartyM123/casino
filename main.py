@@ -2,6 +2,7 @@ import random
 import time
 import matplotlib.pyplot as plt
 
+random.seed(1)
 def generate():
     return random.choice(['red', 'black'])
 
@@ -31,47 +32,53 @@ class player:
     def __str__(self):
         return str(f'model id: {self.id}, money: {self.money}')
 
+def create_history(players, n_turns):
+    # set parameters
+    history = []
 
-# set parameters
-history = []
-players = []
-
-n_turns=100
-n_players=2
-
-#create history with known victory colors
-for i in range(n_turns):
-    history.append(dict(won=generate()))
-
-#create players
-for i in range(n_players):
-    players.append(player())
+    #create history with known victory colors
+    for i in range(n_turns):
+        history.append(dict(won=generate()))
 
 
-for player in players:
-    if player.alive:
-        for turn in range(len(history)):
-            tip, amount = player.make_decision()
-            amount=min([player.money, amount]) #to be sure that player won't bet more than he has
-            if tip == history[turn]['won']:
-                player+amount
-                player.on_win()
-                history[turn][str(player.id)]=dict(tip=tip, amount=amount, balance=player.money)
-            else:
-                player-amount
-                player.on_lose()
-                history[turn][str(player.id)]=dict(tip=tip, amount=amount, balance=player.money)
+    for player in players:
+        if player.alive:
+            for turn in range(len(history)):
+                tip, amount = player.make_decision()
+                amount=min([player.money, amount]) #to be sure that player won't bet more than he has
+                if tip == history[turn]['won']:
+                    player+amount
+                    player.on_win()
+                    history[turn][str(player.id)]=dict(tip=tip, amount=amount, balance=player.money)
+                else:
+                    player-amount
+                    player.on_lose()
+                    history[turn][str(player.id)]=dict(tip=tip, amount=amount, balance=player.money)
+    return history
 
-ids=[p.id for p in players]
+if True == False:
+    n_turns=100 #number of turn of rulet
+    n_players=2 #number of players
 
-ratio=[i['won'] for i in history].count('red')/len(history)
+    players = []
+    #create players
+    for i in range(n_players):
+        players.append(player())
 
-a=[i[id]['balance'] for i in history]
+    history=create_history(players, n_turns)
 
-plt.plot(a)
-plt.show()
+    ids=[p.id for p in players]
 
-print(history)
-print(a)
-print(ids)
-print(ratio)
+    ratio=[i['won'] for i in history].count('red')/len(history)
+
+    id=ids[0]
+
+    a=[i[id]['balance'] for i in history]
+
+    plt.plot(a)
+    plt.show()
+
+    print(history)
+    print(a)
+    print(ids)
+    print(ratio)
