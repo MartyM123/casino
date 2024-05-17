@@ -2,15 +2,26 @@ import random
 import time
 import matplotlib.pyplot as plt
 
-random.seed(1)
+random.seed()
 def generate():
-    return random.choice(['red', 'black'])
+    return random.choices(['red', 'black', 'green'], ((18/37),(18/37),(1/37)))[0]
 
 class player:
-    def __init__(self):
-        self.id = str(random.randint(1, 10**6))
-        self.decision_function = lambda: random.choice(['red', 'black'])
-        self.money=50
+    def __init__(self, id:str=None, decision_function=None, money:int=None):
+        if id==None:
+            self.id = str(random.randint(1, 10**6))
+        else:
+            self.id=id
+
+        if decision_function == None:
+            self.decision_function =  lambda: random.choice(['red', 'black'])
+        else:
+            self.decision_function = decision_function
+        
+        if money==None:
+            self.money=50
+        else:
+            self.money=money
         self.alive=True
 
     def make_decision(self):
@@ -38,7 +49,7 @@ def create_history(players, n_turns):
 
     #create history with known victory colors
     for i in range(n_turns):
-        history.append(dict(won=generate()))
+        history.append(dict(turn=i))
 
 
     for player in players:
@@ -46,14 +57,17 @@ def create_history(players, n_turns):
             for turn in range(len(history)):
                 tip, amount = player.make_decision()
                 amount=min([player.money, amount]) #to be sure that player won't bet more than he has
-                if tip == history[turn]['won']:
+                won=generate()
+                if tip == won:
                     player+amount
                     player.on_win()
                     history[turn][str(player.id)]=dict(tip=tip, amount=amount, balance=player.money)
+                    history[turn][str(player.id)]['won']=won
                 else:
                     player-amount
                     player.on_lose()
                     history[turn][str(player.id)]=dict(tip=tip, amount=amount, balance=player.money)
+                    history[turn][str(player.id)]['won']=won
     return history
 
 if True == False:
