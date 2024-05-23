@@ -1,23 +1,20 @@
 import random
 import time
+import numpy as np
 import matplotlib.pyplot as plt
 
-random.seed()
 def generate():
     return random.choices(['red', 'black', 'green'], ((18/37),(18/37),(1/37)))[0]
 
-class player:
-    def __init__(self, id:str=None, decision_function=None, money:int=None):
-        if id==None:
-            self.id = str(random.randint(1, 10**6))
-        else:
-            self.id=id
+def generate_r_b():
+    return random.choice(['red', 'black'])
 
-        if decision_function == None:
-            self.decision_function =  lambda: random.choice(['red', 'black'])
-        else:
-            self.decision_function = decision_function
-        
+generate = generate_r_b
+
+class player:
+    def __init__(self, money:int=None):
+        self.id = str(random.randint(1, 10**6))
+        self.decision_function =  lambda: random.choice(['red', 'black'])
         if money==None:
             self.money=50
         else:
@@ -41,7 +38,7 @@ class player:
         self.money=self.money-other
 
     def __str__(self):
-        return str(f'model id: {self.id}, money: {self.money}')
+        return f'model id: {self.id}, money: {self.money}'
 
 def create_history(players, n_turns):
     # set parameters
